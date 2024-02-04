@@ -1,5 +1,6 @@
 pub mod user_interface {
     use std::{error, io, process};
+    use mazeGenerator::maze;
 
     fn print_menu() {
         println!("***Maze Generator Menu***\nChoose command(1 ... 5)\n\
@@ -33,7 +34,11 @@ pub mod user_interface {
 
     fn match_user_input(menu: &Menu) {
         match menu {
-            Menu::GenerateMaze => println!("We are going to generate a new maze\n"),
+            Menu::GenerateMaze => {
+                println!("We are going to generate a new maze\n");
+                let mut maze= maze::create_initial_matrix();
+                maze.print_maze();
+            },
             Menu::SaveMaze => println!("The maze will be saved to a file\n"),
             Menu::LoadMaze => println!("The maze will be loaded from a file\n"),
             Menu::SolveMaze => println!("The solution to the current maze will be shown\n"),

@@ -1,6 +1,5 @@
 mod user_interface;
 
-//TODO: 1. Generate user interface (menu)
 //TODO: 2. Choose an algorithm for maze generation and apply it
 //TODO: 3. Save result to a file
 //TODO: 4. Load result from a file
