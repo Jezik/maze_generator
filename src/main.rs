@@ -1,4 +1,5 @@
 mod user_interface;
+mod maze;
 
 //TODO: 2. Choose an algorithm for maze generation and apply it
 //TODO: 3. Save result to a file
@@ -7,5 +8,5 @@ mod user_interface;
 
 
 fn main() {
-    user_interface::user_interface::run_application_logic();
+    user_interface::run_application_logic();
 }
