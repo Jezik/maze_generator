@@ -22,11 +22,11 @@ impl MazeStruct {
     }
 }
 
-pub fn create_initial_matrix() -> MazeStruct {
+pub fn create_initial_matrix(width: i32, height: i32) -> MazeStruct {
     let mut maze_struct = MazeStruct::new();
-    for y in 0..11 {
+    for y in 0..height {
         let mut temp_vect: Vec<Cell> = Vec::new();
-        for x in 0..11 {
+        for x in 0..width {
             temp_vect.push(Cell::new(x, y));
         }
         maze_struct.maze.push(temp_vect);

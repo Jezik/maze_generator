@@ -34,8 +34,9 @@ impl Menu {
 fn match_user_input(menu: &Menu) {
     match menu {
         Menu::GenerateMaze => {
-            println!("We are going to generate a new maze\n");
-            let mut maze= maze::create_initial_matrix();
+            println!("We are going to generate a new maze");
+            let (width, height) = get_maze_dimensions();
+            let mut maze= maze::create_initial_matrix(width, height);
             maze.print_maze();
         },
         Menu::SaveMaze => println!("The maze will be saved to a file\n"),
@@ -46,6 +47,27 @@ fn match_user_input(menu: &Menu) {
             process::exit(0);
         },
     }
+}
+
+fn get_i32_from_user() -> i32 {
+    loop {
+        let mut some_str = String::new();
+        io::stdin()
+            .read_line(&mut some_str)
+            .expect("Reading the input is impossible");
+        if let Ok(some_int) = some_str.trim().parse::<i32>() {
+            return some_int;
+        } else {
+            println!("Consider using a valid integer next time");
+        }
+    }
+}
+
+fn get_maze_dimensions() -> (i32, i32) {
+    println!("Please provide to integers for the maze generation. Odd numbers show much better result though :)");
+    let x = get_i32_from_user();
+    let y = get_i32_from_user();
+    (x ,y)
 }
 
 pub fn run_application_logic() {
