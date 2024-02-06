@@ -1,5 +1,5 @@
 use std::{error, io, process};
-use crate::maze;
+use crate::maze::MazeStruct;
 
 fn print_menu() {
     println!("***Maze Generator Menu***\nChoose command(1 ... 5)\n\
@@ -36,7 +36,7 @@ fn match_user_input(menu: &Menu) {
         Menu::GenerateMaze => {
             println!("We are going to generate a new maze");
             let (width, height) = get_maze_dimensions();
-            let mut maze= maze::create_initial_matrix(width, height);
+            let maze = MazeStruct::new(width, height);
             maze.print_maze();
         },
         Menu::SaveMaze => println!("The maze will be saved to a file\n"),
