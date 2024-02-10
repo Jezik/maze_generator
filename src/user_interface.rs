@@ -1,5 +1,5 @@
 use std::{error, io, process};
-use crate::maze::MazeStruct;
+use crate::maze::Maze;
 
 fn print_menu() {
     println!("***Maze Generator Menu***\nChoose command(1 ... 5)\n\
@@ -31,12 +31,12 @@ impl Menu {
     }
 }
 
-fn match_user_input(menu: &Menu) {
+fn match_user_input(menu: &Menu, maze: &mut Maze) {
     match menu {
         Menu::GenerateMaze => {
             println!("We are going to generate a new maze");
             let (width, height) = get_maze_dimensions();
-            let maze = MazeStruct::new(width, height);
+            Maze::generate_maze(maze, width, height);
             maze.print_maze();
         },
         Menu::SaveMaze => println!("The maze will be saved to a file\n"),
@@ -49,28 +49,28 @@ fn match_user_input(menu: &Menu) {
     }
 }
 
-fn get_i32_from_user() -> i32 {
+fn get_i32_from_user() -> usize {
     loop {
         let mut some_str = String::new();
         io::stdin()
             .read_line(&mut some_str)
             .expect("Reading the input is impossible");
-        if let Ok(some_int) = some_str.trim().parse::<i32>() {
-            return some_int;
+        if let Ok(some_usize) = some_str.trim().parse::<usize>() {
+            return some_usize;
         } else {
             println!("Consider using a valid integer next time");
         }
     }
 }
 
-fn get_maze_dimensions() -> (i32, i32) {
+fn get_maze_dimensions() -> (usize, usize) {
     println!("Please provide to integers for the maze generation. Odd numbers show much better result though :)");
     let x = get_i32_from_user();
     let y = get_i32_from_user();
     (x ,y)
 }
 
-pub fn run_application_logic() {
+pub fn run_application_logic(maze: &mut Maze) {
     loop {
         print_menu();
 
@@ -80,7 +80,7 @@ pub fn run_application_logic() {
             .expect("Can't read input");
 
         if let Ok(menu) = Menu::from_str(&user_input) {
-            match_user_input(&menu);
+            match_user_input(&menu, maze);
         } else {
             println!("Error has occurred. Try one more time.\nAcceptable command is an integer within the range [1..5]\n");
         }
