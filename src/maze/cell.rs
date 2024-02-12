@@ -3,17 +3,18 @@ use std::fmt::{Display, Formatter};
 #[derive(PartialEq)]
 pub enum State {
     Wall,
-    //Path,
+    Path,
     Empty,
 }
 
 pub struct Cell {
     state: State,
+    is_visited: bool,
 }
 
 impl Cell {
     pub fn new() -> Self {
-        Cell {state: State::Wall}
+        Cell {state: State::Wall, is_visited: false}
     }
 
     pub fn set_state(&mut self, new_state: State) {
@@ -23,12 +24,21 @@ impl Cell {
     pub fn get_state(&self) -> &State {
         &self.state
     }
+
+    pub fn is_visited(&self) -> bool {
+        self.is_visited
+    }
+
+    pub fn set_visited(&mut self) {
+        self.is_visited = true;
+    }
 }
 
 impl Display for Cell {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match &self.state {
             State::Wall => write!(f, "▓▓"),
+            State::Path => write!(f, "##"),
             State::Empty => write!(f, "  "),
         }
     }

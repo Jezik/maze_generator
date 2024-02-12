@@ -34,14 +34,16 @@ impl Menu {
 fn match_user_input(menu: &Menu, maze: &mut Maze) {
     match menu {
         Menu::GenerateMaze => {
-            println!("We are going to generate a new maze");
             let (width, height) = get_maze_dimensions();
-            Maze::generate_maze(maze, width, height);
+            maze.generate_maze(width, height);
             maze.print_maze();
         },
         Menu::SaveMaze => println!("The maze will be saved to a file\n"),
         Menu::LoadMaze => println!("The maze will be loaded from a file\n"),
-        Menu::SolveMaze => println!("The solution to the current maze will be shown\n"),
+        Menu::SolveMaze => {
+            maze.find_path();
+            maze.print_maze();
+        },
         Menu::Quit => {
             println!("Thanks for using Rust for this, bye! :)");
             process::exit(0);
