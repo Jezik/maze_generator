@@ -38,8 +38,29 @@ fn match_user_input(menu: &Menu, maze: &mut Maze) {
             maze.generate_maze(width, height);
             maze.print_maze();
         },
-        Menu::SaveMaze => println!("The maze will be saved to a file\n"),
-        Menu::LoadMaze => println!("The maze will be loaded from a file\n"),
+        Menu::SaveMaze => {
+            println!("Please input the name of a file");
+            let mut file_name = String::new();
+            io::stdin()
+                .read_line(&mut file_name)
+                .expect("Error proceeding input");
+            let file_name= file_name.trim();
+            let file_name_extension = format!("{}.maze", file_name);
+            if let Err(e) = maze.write_to_file(&file_name_extension) {
+                println!("Error has occurred. {}", e.to_string());
+            }
+        },
+        Menu::LoadMaze => {
+            println!("Please input the name of a file");
+            let mut file_name = String::new();
+            io::stdin()
+                .read_line(&mut file_name)
+                .expect("Error proceeding input");
+            let file_name= file_name.trim();
+            let file_name_extension = format!("{}.maze", file_name);
+            maze.read_from_file(&file_name_extension);
+            maze.print_maze();
+        },
         Menu::SolveMaze => {
             maze.find_path();
             maze.print_maze();
@@ -51,7 +72,7 @@ fn match_user_input(menu: &Menu, maze: &mut Maze) {
     }
 }
 
-fn get_i32_from_user() -> usize {
+fn get_usize_from_user() -> usize {
     loop {
         let mut some_str = String::new();
         io::stdin()
@@ -67,8 +88,8 @@ fn get_i32_from_user() -> usize {
 
 fn get_maze_dimensions() -> (usize, usize) {
     println!("Please provide to integers for the maze generation. Odd numbers show much better result though :)");
-    let x = get_i32_from_user();
-    let y = get_i32_from_user();
+    let x = get_usize_from_user();
+    let y = get_usize_from_user();
     (x ,y)
 }
 

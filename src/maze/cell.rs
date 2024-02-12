@@ -13,8 +13,8 @@ pub struct Cell {
 }
 
 impl Cell {
-    pub fn new() -> Self {
-        Cell {state: State::Wall, is_visited: false}
+    pub fn new(state: State, is_visited: bool) -> Self {
+        Cell {state, is_visited}
     }
 
     pub fn set_state(&mut self, new_state: State) {

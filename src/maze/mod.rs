@@ -1,3 +1,7 @@
+use std::fs::File;
+use std::io;
+use std::io::{BufRead, BufReader};
+use std::io::Write;
 use crate::maze::cell::{Cell, State};
 
 use rand::Rng;
@@ -21,7 +25,7 @@ impl Maze {
         for _y in 0..height {
             let mut temp_vect: Vec<Cell> = Vec::new();
             for _x in 0..width {
-                temp_vect.push(Cell::new());
+                temp_vect.push(Cell::new(State::Wall, false));
             }
             self.grid.push(temp_vect);
         }
@@ -131,6 +135,48 @@ impl Maze {
         }
 
         neighbours
+    }
+
+    pub fn write_to_file(&self, filename: &str) -> io::Result<()> {
+        let mut file = File::create(filename)?;
+        for width in &self.grid {
+            for cell in width {
+                match cell.get_state() {
+                    State::Wall => write!(file, "▓")?,
+                    State::Path => write!(file, "#")?,
+                    State::Empty => write!(file, " ")?,
+                }
+            }
+            writeln!(file)?;
+        }
+        Ok(())
+    }
+
+    pub fn read_from_file(&mut self, filename: &str) {
+        self.grid.clear();
+
+        let file = File::open(filename).expect("Failed to open a file. Check the file name.");
+        let reader = BufReader::new(file);
+        let mut width = 0;
+        let mut height = 0;
+
+        for line in reader.lines() {
+            let line = line.unwrap();
+            let mut row = Vec::new();
+            for ch in line.chars() {
+                match ch {
+                    '▓' => row.push(Cell::new(State::Wall, false)),
+                    '#' => row.push(Cell::new(State::Path, true)),
+                    ' ' => row.push(Cell::new(State::Empty, false)),
+                    _ => println!("Invalid character"),
+                }
+            }
+            width += 1;
+            height = row.len();
+            self.grid.push(row);
+        }
+        self.width = width;
+        self.height = height;
     }
 
     pub fn print_maze(&self) {
